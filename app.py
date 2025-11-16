@@ -1,25 +1,20 @@
-import os
-# Force CPU usage to avoid device errors on Streamlit Cloud
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
-
-import torch
-torch.set_default_device('cpu')
-
 import streamlit as st
+import os
 from dotenv import load_dotenv
 from langchain_community.vectorstores import FAISS
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from langchain_huggingface import HuggingFacePipeline
-
-
 from langchain_core.documents import Document
-from transformers import pipeline
 from utils import extract_text_from_pdf, split_text_with_metadata
 
 load_dotenv()
 
-# Force CPU for embeddings
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+openai_api_key = os.getenv("OPENAI_API_KEY")
+if not openai_api_key:
+    st.error("Please set OPENAI_API_KEY in .env file")
+    st.stop()
+
+embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 
 # Use a lightweight Hugging Face model for LLM
 llm = HuggingFacePipeline.from_model_id(
