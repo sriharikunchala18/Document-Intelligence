@@ -2,6 +2,9 @@ import os
 # Force CPU usage to avoid device errors on Streamlit Cloud
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
+import torch
+torch.set_default_device('cpu')
+
 import streamlit as st
 from dotenv import load_dotenv
 from langchain_community.vectorstores import FAISS
@@ -16,13 +19,13 @@ from utils import extract_text_from_pdf, split_text_with_metadata
 load_dotenv()
 
 # Force CPU for embeddings
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2", model_kwargs={'device': 'cpu'})
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
 # Use a lightweight Hugging Face model for LLM
 llm = HuggingFacePipeline.from_model_id(
     model_id="distilgpt2",
     task="text-generation",
-    device=0,  # Force CPU
+    device=-1,  # Force CPU
     pipeline_kwargs={"temperature": 0.1, "max_new_tokens": 100, "do_sample": True, "pad_token_id": 50256, "eos_token_id": 50256, "max_length": 512}
 )
 
