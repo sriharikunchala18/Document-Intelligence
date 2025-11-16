@@ -1,7 +1,6 @@
 streamlit
 langchain
 langchain-community
-langchain-huggingface
 faiss-cpu
 pdfplumber
 python-dotenv
