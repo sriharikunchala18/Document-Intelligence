@@ -1,6 +1,9 @@
 import streamlit as st
 import os
 from dotenv import load_dotenv
+
+# Force CPU usage to avoid device errors on Streamlit Cloud
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_huggingface import HuggingFacePipeline
