@@ -1,10 +1,12 @@
 streamlit
 langchain
 langchain-community
-langchain-openai
+langchain-huggingface
 langchain-core
 faiss-cpu
 pypdf2
-openai
+transformers
+torch
+sentence-transformers
 python-dotenv
 langchain-experimental

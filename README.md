@@ -12,8 +12,7 @@ A RAG-based system for uploading PDFs and asking questions about their content.
 ## Setup
 1. Clone the repository.
 2. Install dependencies: `pip install -r requirements.txt`
-3. Add your OpenAI API key to `.env` file.
-4. Run the app: `streamlit run app.py`
+3. Run the app: `streamlit run app.py`
 
 ## Usage
 1. Upload a PDF file.
