@@ -48,9 +48,15 @@ if st.session_state.vectorstore:
         with st.spinner("Generating answer..."):
             retriever = st.session_state.vectorstore.as_retriever()
             docs = retriever.invoke(question)
-            context = "\n".join([doc.page_content for doc in docs])
+            # Limit context to avoid token limit
+            context = "\n".join([doc.page_content for doc in docs[:3]])  # Top 3 docs
             prompt = f"Context: {context}\nQuestion: {question}\nAnswer:"
-            answer = llm.invoke(prompt)
+            response = llm.invoke(prompt)
+            # Extract text from response
+            if isinstance(response, list):
+                answer = response[0].get('generated_text', str(response[0]))
+            else:
+                answer = str(response)
             sources = docs
             st.write("**Answer:**", answer)
             st.write("**Sources:**")
