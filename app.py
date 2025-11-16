@@ -13,11 +13,11 @@ load_dotenv()
 
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
-# Use a smaller Hugging Face model for LLM
+# Use a better Hugging Face model for LLM
 llm = HuggingFacePipeline.from_model_id(
-    model_id="microsoft/DialoGPT-small",
+    model_id="gpt2",
     task="text-generation",
-    pipeline_kwargs={"temperature": 0.1, "max_new_tokens": 100}
+    pipeline_kwargs={"temperature": 0.1, "max_new_tokens": 300, "do_sample": True, "pad_token_id": 50256}
 )
 
 st.title("Cerevyn Document Intelligence – AI PDF/Q&A Agent")
