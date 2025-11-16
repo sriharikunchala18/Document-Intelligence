@@ -47,11 +47,11 @@ if st.session_state.vectorstore:
     question = st.text_input("Enter your question:")
     if question and st.button("Ask"):
         with st.spinner("Generating answer..."):
-            retriever = st.session_state.vectorstore.as_retriever()
+            retriever = st.session_state.vectorstore.as_retriever(search_kwargs={"k": 3})  # Retrieve top 3 most relevant chunks
             docs = retriever.invoke(question)
             # Limit context to avoid token limit
-            context = "\n".join([doc.page_content[:500] for doc in docs[:5]])  # Top 5 docs, 500 chars each
-            prompt = f"Use the following context to answer the question. If the context does not contain the answer, say 'I don't know'.\nContext: {context}\nQuestion: {question}\nAnswer:"
+            context = "\n".join([doc.page_content[:300] for doc in docs])  # 300 chars per chunk
+            prompt = f"Answer the question based only on the provided context. If the answer is not in the context, say 'I don't know'.\nContext: {context}\nQuestion: {question}\nAnswer:"
             response = llm.invoke(prompt)
             # Extract text from response
             if isinstance(response, list):
@@ -63,9 +63,9 @@ if st.session_state.vectorstore:
                 answer = full_text[len(prompt):].strip()
             else:
                 answer = full_text.strip()
-            # Clean up answer
-            answer = answer.split('\n')[0].strip()  # Take first line
-            if not answer or answer.lower().startswith("answer:"):
+            # Clean up answer: take first line, remove extra text
+            answer = answer.split('\n')[0].strip()
+            if not answer or len(answer) < 5 or answer.lower().startswith("answer:") or "context:" in answer.lower():
                 answer = "I don't know based on the document."
             sources = docs
             st.write("**Answer:**", answer)
