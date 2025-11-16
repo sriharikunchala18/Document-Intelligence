@@ -6,6 +6,6 @@
 - [x] Create .env file for OpenAI API key (removed, using local models)
 - [x] Create README.md with setup instructions
 - [x] Create architecture_diagram.txt
-- [x] Test locally by running the app (minimal testing done, app loads on Streamlit Cloud)
+- [x] Test locally by running the app (minimal testing done, app loads on Streamlit Cloud without errors)
 - [x] Deploy to Streamlit Cloud for live demo (repo pushed, ready for deployment)
 - [x] Push code to GitHub repo
