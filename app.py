@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_huggingface import HuggingFacePipeline
-from langchain.chains import ConversationalRetrievalChain
+
 from langchain_core.documents import Document
 from transformers import pipeline
 from utils import extract_text_from_pdf, split_text_with_metadata
@@ -46,14 +46,12 @@ if st.session_state.vectorstore:
     question = st.text_input("Enter your question:")
     if question and st.button("Ask"):
         with st.spinner("Generating answer..."):
-            qa_chain = ConversationalRetrievalChain.from_llm(
-                llm=llm,
-                retriever=st.session_state.vectorstore.as_retriever(),
-                return_source_documents=True
-            )
-            result = qa_chain({"question": question, "chat_history": []})
-            answer = result["result"]
-            sources = result["source_documents"]
+            retriever = st.session_state.vectorstore.as_retriever()
+            docs = retriever.get_relevant_documents(question)
+            context = "\n".join([doc.page_content for doc in docs])
+            prompt = f"Context: {context}\nQuestion: {question}\nAnswer:"
+            answer = llm(prompt)
+            sources = docs
             st.write("**Answer:**", answer)
             st.write("**Sources:**")
             for source in sources:
