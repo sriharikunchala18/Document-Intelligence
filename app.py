@@ -3,7 +3,6 @@ import os
 from dotenv import load_dotenv
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
-from langchain_huggingface import HuggingFacePipeline
 from langchain_core.documents import Document
 from utils import extract_text_from_pdf, split_text_with_metadata
 
@@ -16,13 +15,8 @@ if not openai_api_key:
 
 embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 
-# Use a lightweight Hugging Face model for LLM
-llm = HuggingFacePipeline.from_model_id(
-    model_id="distilgpt2",
-    task="text-generation",
-    device=-1,  # Force CPU
-    pipeline_kwargs={"temperature": 0.1, "max_new_tokens": 100, "do_sample": True, "pad_token_id": 50256, "eos_token_id": 50256, "max_length": 512}
-)
+from langchain.llms import OpenAI
+llm = OpenAI(openai_api_key=openai_api_key, temperature=0)
 
 st.title("Cerevyn Document Intelligence – AI PDF/Q&A Agent")
 
