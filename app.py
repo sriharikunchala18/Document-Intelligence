@@ -15,9 +15,9 @@ embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-
 
 # Use a better Hugging Face model for LLM
 llm = HuggingFacePipeline.from_model_id(
-    model_id="gpt2",
+    model_id="EleutherAI/gpt-neo-125M",
     task="text-generation",
-    pipeline_kwargs={"temperature": 0.1, "max_new_tokens": 300, "do_sample": True, "pad_token_id": 50256}
+    pipeline_kwargs={"temperature": 0.1, "max_new_tokens": 150, "do_sample": True, "pad_token_id": 50256, "eos_token_id": 50256, "max_length": 512}
 )
 
 st.title("Cerevyn Document Intelligence – AI PDF/Q&A Agent")
@@ -54,9 +54,14 @@ if st.session_state.vectorstore:
             response = llm.invoke(prompt)
             # Extract text from response
             if isinstance(response, list):
-                answer = response[0].get('generated_text', str(response[0]))
+                full_text = response[0].get('generated_text', str(response[0]))
             else:
-                answer = str(response)
+                full_text = str(response)
+            # Remove the prompt from the response
+            if full_text.startswith(prompt):
+                answer = full_text[len(prompt):].strip()
+            else:
+                answer = full_text.strip()
             sources = docs
             st.write("**Answer:**", answer)
             st.write("**Sources:**")
