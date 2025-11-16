@@ -47,7 +47,7 @@ if st.session_state.vectorstore:
     if question and st.button("Ask"):
         with st.spinner("Generating answer..."):
             retriever = st.session_state.vectorstore.as_retriever()
-            docs = retriever.get_relevant_documents(question)
+            docs = retriever.invoke(question)
             context = "\n".join([doc.page_content for doc in docs])
             prompt = f"Context: {context}\nQuestion: {question}\nAnswer:"
             answer = llm(prompt)
