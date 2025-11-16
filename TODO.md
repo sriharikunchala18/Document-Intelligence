@@ -3,7 +3,7 @@
 - [x] Create requirements.txt with dependencies
 - [x] Create utils.py: Helper functions for PDF text extraction with page numbers
 - [x] Create app.py: Streamlit app for PDF upload, processing, and Q&A
-- [x] Create .env file for OpenAI API key (removed, using Hugging Face)
+- [x] Create .env file for OpenAI API key (not needed, switched to local models)
 - [x] Create README.md with setup instructions
 - [x] Create architecture_diagram.txt
 - [x] Test locally by running the app
