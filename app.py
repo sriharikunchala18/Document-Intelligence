@@ -1,11 +1,11 @@
 import streamlit as st
 import os
 from dotenv import load_dotenv
-from langchain.vectorstores import FAISS
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.llms import OpenAI
+from langchain_community.vectorstores import FAISS
+from langchain_openai import OpenAIEmbeddings
+from langchain_openai import OpenAI
 from langchain.chains import RetrievalQA
-from langchain.docstore.document import Document
+from langchain_core.documents import Document
 from utils import extract_text_from_pdf, split_text_with_metadata
 
 load_dotenv()
