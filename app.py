@@ -10,12 +10,13 @@ from utils import extract_text_from_pdf, split_text_with_metadata
 
 load_dotenv()
 
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2", model_kwargs={'device': 'cpu'})
 
 llm = HuggingFacePipeline.from_model_id(
     model_id="gpt2",
     task="text-generation",
     pipeline_kwargs={"max_new_tokens": 100, "temperature": 0.1},
+    model_kwargs={'device': 'cpu'}
 )
 
 st.title("Cerevyn Document Intelligence – AI PDF/Q&A Agent")
