@@ -2,7 +2,7 @@ import streamlit as st
 import os
 from dotenv import load_dotenv
 from langchain_community.vectorstores import FAISS
-from langchain_openai import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings, OpenAI
 from langchain_core.documents import Document
 from utils import extract_text_from_pdf, split_text_with_metadata
 
@@ -15,7 +15,6 @@ if not openai_api_key:
 
 embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 
-from langchain.llms import OpenAI
 llm = OpenAI(openai_api_key=openai_api_key, temperature=0)
 
 st.title("Cerevyn Document Intelligence – AI PDF/Q&A Agent")
