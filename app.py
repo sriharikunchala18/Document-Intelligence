@@ -1,9 +1,9 @@
-import streamlit as st
 import os
-from dotenv import load_dotenv
-
 # Force CPU usage to avoid device errors on Streamlit Cloud
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
+
+import streamlit as st
+from dotenv import load_dotenv
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_huggingface import HuggingFacePipeline
@@ -15,7 +15,8 @@ from utils import extract_text_from_pdf, split_text_with_metadata
 
 load_dotenv()
 
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+# Force CPU for embeddings
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2", model_kwargs={'device': 'cpu'})
 
 # Use a lightweight Hugging Face model for LLM
 llm = HuggingFacePipeline.from_model_id(
