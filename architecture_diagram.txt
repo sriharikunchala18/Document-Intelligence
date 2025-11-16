@@ -1,0 +1,30 @@
+Cerevyn Document Intelligence Architecture
+
++-------------------+     +-------------------+     +-------------------+
+|   User Interface  |     |   PDF Processor   |     |   Vector Store    |
+|   (Streamlit)     | --> |   (PyPDF2)        | --> |   (FAISS)         |
++-------------------+     +-------------------+     +-------------------+
+         |                         |                         |
+         |                         |                         |
+         v                         v                         v
++-------------------+     +-------------------+     +-------------------+
+|   Chat Interface  |     |   Text Splitter   |     |   Embeddings      |
+|   (Q&A)           | <-- |   (LangChain)     | <-- |   (OpenAI)        |
++-------------------+     +-------------------+     +-------------------+
+         |                         |                         |
+         |                         |                         |
+         v                         v                         v
++-------------------+     +-------------------+     +-------------------+
+|   Answer with     |     |   Retrieval       |     |   LLM             |
+|   Page Refs       | <-- |   (RAG Chain)     | <-- |   (OpenAI)        |
++-------------------+     +-------------------+     +-------------------+
+
+Flow:
+1. User uploads PDF via Streamlit UI.
+2. PDF text extracted with page numbers.
+3. Text split into chunks with metadata.
+4. Chunks embedded and stored in FAISS vector store.
+5. User asks question.
+6. Question embedded, similar chunks retrieved.
+7. LLM generates answer using retrieved context.
+8. Answer displayed with source page references.
