@@ -12,12 +12,9 @@ load_dotenv()
 
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2", model_kwargs={'device': 'cpu'})
 
-llm = HuggingFacePipeline.from_model_id(
-    model_id="gpt2",
-    task="text-generation",
-    pipeline_kwargs={"max_new_tokens": 100, "temperature": 0.1},
-    model_kwargs={'device': 'cpu'}
-)
+# Use transformers pipeline directly for LLM
+pipe = pipeline("text-generation", model="gpt2", max_new_tokens=100, temperature=0.1, device=-1)  # device=-1 for CPU
+llm = HuggingFacePipeline(pipeline=pipe)
 
 st.title("Cerevyn Document Intelligence – AI PDF/Q&A Agent")
 
