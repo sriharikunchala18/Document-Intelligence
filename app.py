@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
 from langchain_openai import OpenAI
-from langchain.chains.retrieval_qa import RetrievalQA
+from langchain.chains import RetrievalQA
 from langchain_core.documents import Document
 from utils import extract_text_from_pdf, split_text_with_metadata
 

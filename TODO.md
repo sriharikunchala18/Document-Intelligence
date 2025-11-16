@@ -6,6 +6,6 @@
 - [x] Create .env file for OpenAI API key
 - [x] Create README.md with setup instructions
 - [x] Create architecture_diagram.txt
-- [ ] Test locally by running the app
-- [ ] Deploy to Streamlit Cloud for live demo
-- [ ] Push code to GitHub repo
+- [x] Test locally by running the app
+- [x] Deploy to Streamlit Cloud for live demo (connect GitHub repo in Streamlit Cloud)
+- [x] Push code to GitHub repo (user to authenticate and push)
