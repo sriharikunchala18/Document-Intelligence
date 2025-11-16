@@ -2,20 +2,21 @@ import streamlit as st
 import os
 from dotenv import load_dotenv
 from langchain_community.vectorstores import FAISS
-from langchain_openai import OpenAIEmbeddings, OpenAI
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFacePipeline
 from langchain_core.documents import Document
+from transformers import pipeline
 from utils import extract_text_from_pdf, split_text_with_metadata
 
 load_dotenv()
 
-openai_api_key = st.secrets.get("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")
-if not openai_api_key:
-    st.error("Please set OPENAI_API_KEY in Streamlit Cloud secrets or .env file")
-    st.stop()
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
-embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
-
-llm = OpenAI(openai_api_key=openai_api_key, temperature=0)
+llm = HuggingFacePipeline.from_model_id(
+    model_id="gpt2",
+    task="text-generation",
+    pipeline_kwargs={"max_new_tokens": 100, "temperature": 0.1},
+)
 
 st.title("Cerevyn Document Intelligence – AI PDF/Q&A Agent")
 

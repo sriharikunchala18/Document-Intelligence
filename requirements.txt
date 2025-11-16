@@ -1,7 +1,10 @@
 streamlit
 langchain
 langchain-community
-langchain-openai
+langchain-huggingface
 faiss-cpu
 pdfplumber
 python-dotenv
+transformers
+torch
+sentence-transformers
