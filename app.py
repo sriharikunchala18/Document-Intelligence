@@ -50,8 +50,8 @@ if st.session_state.vectorstore:
             retriever = st.session_state.vectorstore.as_retriever()
             docs = retriever.invoke(question)
             # Limit context to avoid token limit
-            context = "\n".join([doc.page_content[:300] for doc in docs[:3]])  # Top 3 docs, 300 chars each
-            prompt = f"Based on the following context, answer the question concisely.\nContext: {context}\nQuestion: {question}\nAnswer:"
+            context = "\n".join([doc.page_content[:500] for doc in docs[:5]])  # Top 5 docs, 500 chars each
+            prompt = f"Use the following context to answer the question. If the context does not contain the answer, say 'I don't know'.\nContext: {context}\nQuestion: {question}\nAnswer:"
             response = llm.invoke(prompt)
             # Extract text from response
             if isinstance(response, list):
@@ -63,8 +63,10 @@ if st.session_state.vectorstore:
                 answer = full_text[len(prompt):].strip()
             else:
                 answer = full_text.strip()
-            # Limit answer to first sentence or 100 words to avoid repetition
-            answer = answer.split('.')[0] + '.' if '.' in answer else answer[:200]
+            # Clean up answer
+            answer = answer.split('\n')[0].strip()  # Take first line
+            if not answer or answer.lower().startswith("answer:"):
+                answer = "I don't know based on the document."
             sources = docs
             st.write("**Answer:**", answer)
             st.write("**Sources:**")
