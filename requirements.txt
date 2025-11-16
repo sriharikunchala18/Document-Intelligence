@@ -1,6 +1,7 @@
 streamlit
 langchain
 langchain-community
+langchain-core
 faiss-cpu
 pdfplumber
 transformers
