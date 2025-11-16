@@ -6,11 +6,9 @@ from langchain_openai import OpenAIEmbeddings, OpenAI
 from langchain_core.documents import Document
 from utils import extract_text_from_pdf, split_text_with_metadata
 
-load_dotenv()
-
-openai_api_key = os.getenv("OPENAI_API_KEY")
+openai_api_key = st.secrets.get("OPENAI_API_KEY")
 if not openai_api_key:
-    st.error("Please set OPENAI_API_KEY in .env file")
+    st.error("Please set OPENAI_API_KEY in Streamlit Cloud secrets")
     st.stop()
 
 embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
