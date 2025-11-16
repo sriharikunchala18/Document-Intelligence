@@ -15,7 +15,7 @@ from utils import extract_text_from_pdf, split_text_with_metadata
 
 load_dotenv()
 
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2", model_kwargs={'device': 'cpu'}, encode_kwargs={'device': 'cpu'})
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
 # Use a lightweight Hugging Face model for LLM
 llm = HuggingFacePipeline.from_model_id(
