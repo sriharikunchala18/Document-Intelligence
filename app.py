@@ -48,9 +48,9 @@ if st.session_state.vectorstore:
         with st.spinner("Generating answer..."):
             retriever = st.session_state.vectorstore.as_retriever()
             docs = retriever.invoke(question)
-            # Limit context to avoid token limit (GPT-2 max 1024 tokens)
-            context = "\n".join([doc.page_content[:200] for doc in docs[:2]])  # Top 2 docs, 200 chars each
-            prompt = f"Context: {context}\nQuestion: {question}\nAnswer:"
+            # Limit context to avoid token limit
+            context = "\n".join([doc.page_content[:300] for doc in docs[:3]])  # Top 3 docs, 300 chars each
+            prompt = f"Based on the following context, answer the question concisely.\nContext: {context}\nQuestion: {question}\nAnswer:"
             response = llm.invoke(prompt)
             # Extract text from response
             if isinstance(response, list):
@@ -62,6 +62,8 @@ if st.session_state.vectorstore:
                 answer = full_text[len(prompt):].strip()
             else:
                 answer = full_text.strip()
+            # Limit answer to first sentence or 100 words to avoid repetition
+            answer = answer.split('.')[0] + '.' if '.' in answer else answer[:200]
             sources = docs
             st.write("**Answer:**", answer)
             st.write("**Sources:**")
