@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_huggingface import HuggingFacePipeline
+from langchain.chains import RetrievalQA
 
 from langchain_core.documents import Document
 from transformers import pipeline
@@ -46,25 +47,15 @@ if st.session_state.vectorstore:
     question = st.text_input("Enter your question:")
     if question and st.button("Ask"):
         with st.spinner("Generating answer..."):
-            retriever = st.session_state.vectorstore.as_retriever()
-            docs = retriever.invoke(question)
-            # Limit context to avoid token limit
-            context = "\n".join([doc.page_content[:300] for doc in docs[:3]])  # Top 3 docs, 300 chars each
-            prompt = f"Based on the following context, answer the question concisely.\nContext: {context}\nQuestion: {question}\nAnswer:"
-            response = llm.invoke(prompt)
-            # Extract text from response
-            if isinstance(response, list):
-                full_text = response[0].get('generated_text', str(response[0]))
-            else:
-                full_text = str(response)
-            # Remove the prompt from the response
-            if full_text.startswith(prompt):
-                answer = full_text[len(prompt):].strip()
-            else:
-                answer = full_text.strip()
-            # Limit answer to first sentence or 100 words to avoid repetition
-            answer = answer.split('.')[0] + '.' if '.' in answer else answer[:200]
-            sources = docs
+            qa_chain = RetrievalQA.from_chain_type(
+                llm=llm,
+                chain_type="stuff",
+                retriever=st.session_state.vectorstore.as_retriever(),
+                return_source_documents=True
+            )
+            result = qa_chain({"query": question})
+            answer = result["result"]
+            sources = result["source_documents"]
             st.write("**Answer:**", answer)
             st.write("**Sources:**")
             for source in sources:
