@@ -2,7 +2,7 @@ import streamlit as st
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.llms import HuggingFacePipeline
-from langchain_core.documents import Document
+from langchain.schema import Document
 from transformers import pipeline
 from utils import extract_text_from_pdf, split_text_with_metadata
 
