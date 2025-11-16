@@ -48,8 +48,8 @@ if st.session_state.vectorstore:
         with st.spinner("Generating answer..."):
             retriever = st.session_state.vectorstore.as_retriever()
             docs = retriever.invoke(question)
-            # Limit context to avoid token limit
-            context = "\n".join([doc.page_content for doc in docs[:3]])  # Top 3 docs
+            # Limit context to avoid token limit (GPT-2 max 1024 tokens)
+            context = "\n".join([doc.page_content[:200] for doc in docs[:2]])  # Top 2 docs, 200 chars each
             prompt = f"Context: {context}\nQuestion: {question}\nAnswer:"
             response = llm.invoke(prompt)
             # Extract text from response
