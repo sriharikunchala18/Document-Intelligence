@@ -50,7 +50,7 @@ if st.session_state.vectorstore:
             docs = retriever.invoke(question)
             context = "\n".join([doc.page_content for doc in docs])
             prompt = f"Context: {context}\nQuestion: {question}\nAnswer:"
-            answer = llm(prompt)
+            answer = llm.invoke(prompt)
             sources = docs
             st.write("**Answer:**", answer)
             st.write("**Sources:**")
