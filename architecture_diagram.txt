@@ -1,24 +1,30 @@
+```
 Cerevyn Document Intelligence System Architecture
 
-The application is built using a Retrieval-Augmented Generation (RAG) approach for document Q&A.
-
-Components:
-- Frontend: Streamlit web application for user interaction
-- PDF Processing: pdfplumber library for text extraction from PDF files
-- Text Chunking: RecursiveCharacterTextSplitter to divide text into overlapping chunks
-- Embeddings: HuggingFace sentence transformers to convert text to vectors
-- Vector Database: FAISS for storing and searching vector embeddings
-- Language Model: GPT-2 via transformers pipeline for answer generation
-- Session Management: Streamlit session state for handling multiple documents
++-------------------+     +-------------------+     +-------------------+
+|   User Interface  |     |  PDF Processing   |     |  Text Chunking    |
+|   (Streamlit)     | --> |  (pdfplumber)     | --> |  (LangChain)      |
++-------------------+     +-------------------+     +-------------------+
+         |                           |                           |
+         v                           v                           v
++-------------------+     +-------------------+     +-------------------+
+|  Embeddings       |     |  Vector Store     |     |  Retrieval        |
+|  (HuggingFace)    | --> |  (FAISS)          | <-- |  (Similarity)     |
++-------------------+     +-------------------+     +-------------------+
+         |                           |                           |
+         v                           v                           v
++-------------------+     +-------------------+     +-------------------+
+|  Language Model   |     |  Answer Generation|     |  Output with      |
+|  (GPT-2)          | --> |  (RAG)            | --> |  Page References  |
++-------------------+     +-------------------+     +-------------------+
 
 Data Flow:
-1. User selects and uploads a PDF file through the Streamlit interface.
-2. The PDF is processed page by page to extract text content.
-3. Extracted text is split into smaller chunks while preserving page metadata.
-4. Each text chunk is converted to a vector embedding using pre-trained models.
-5. Embeddings are stored in a FAISS index for efficient similarity search.
-6. When a user asks a question, it is also embedded and used to retrieve relevant chunks.
-7. Retrieved chunks are passed as context to the language model to generate an answer.
-8. The answer is presented to the user along with references to source pages.
-
-This architecture ensures fast retrieval and accurate answers based on document content.
+1. User uploads PDF via Streamlit UI
+2. Extract text from PDF pages
+3. Split text into chunks with metadata
+4. Generate embeddings for chunks
+5. Store in FAISS vector database
+6. User query -> embed -> retrieve top chunks
+7. Pass context to LLM for answer
+8. Display answer with source page refs
+```
