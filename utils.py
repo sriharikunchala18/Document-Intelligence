@@ -1,5 +1,5 @@
 import pdfplumber
-from langchain_community.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 def extract_text_from_pdf(pdf_file):
     pages = []

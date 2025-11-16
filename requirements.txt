@@ -7,3 +7,4 @@ pdfplumber
 transformers
 torch
 sentence-transformers
+langchain-text-splitters
